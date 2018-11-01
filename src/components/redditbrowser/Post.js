@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'
+import Comments from './Comments'
 
 class Post extends Component {
 
@@ -12,7 +13,7 @@ class Post extends Component {
     }
 
     video(url) {
-        return (<video autoPlay={true} loop={true} controls ={"post"} className={"post"}>
+        return (<video autoPlay={true} loop={true} controls={"post"} className={"post"}>
             <source src={url}/>
         </video>)
 
@@ -26,7 +27,7 @@ class Post extends Component {
         return (
             <div>
                 <button onClick={() => this.albumImageFinder(-1)}>Previous</button>
-                {this.albumListIndex+1}/{this.albumList.length}
+                {this.albumListIndex + 1}/{this.albumList.length}
                 <button onClick={() => this.albumImageFinder(1)}>Next</button>
                 <br/>
                 {this.image(url)}
@@ -68,10 +69,10 @@ class Post extends Component {
 
     albumImageFinder(dir) {
         this.albumListIndex += dir;
-        if (this.albumListIndex < 0){
+        if (this.albumListIndex < 0) {
             this.albumListIndex = this.albumList.length - 1
         }
-        if (this.albumListIndex >= this.albumList.length){
+        if (this.albumListIndex >= this.albumList.length) {
             this.albumListIndex = 0;
         }
         this.setState({url: this.album(this.albumList[this.albumListIndex])})
@@ -136,10 +137,10 @@ class Post extends Component {
 
     render() {
         return (
-            <div className="post">
+            <div>
                 {this.props.url}
-                <br/>
-                <div align="center">{this.state.url}</div>
+                <div align="center" className={"postimage"}>{this.state.url}</div>
+                <Comments post_id={this.props.post_id}/>
             </div>
         )
     }

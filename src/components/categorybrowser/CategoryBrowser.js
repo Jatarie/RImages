@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import pornlist from './pornlist'
+import pornlist from './pornlist_1'
 import CategoryTable from "./CategoryTable";
 
 class CategoryBrowser extends Component {
@@ -31,6 +31,7 @@ class CategoryBrowser extends Component {
 
     handleClickSubCategory(name) {
         this.setState({subcategory: name});
+        this.setState({searchText: ""})
     }
 
     handleClickSubReddit(name) {
@@ -42,28 +43,45 @@ class CategoryBrowser extends Component {
     }
 
     generateLists() {
-        if (!!this.state.supercategory) {
-            this.categoryLists.subcategories = Object.keys(pornlist.data.list[this.state.supercategory]);
-            this.categoryLists.subcategories.map(sc => Object.keys(pornlist.data.list[this.state.supercategory][sc]).map(red => this.categoryLists.subreddits.push(red)));
-        }
+        console.log(this.state.supercategory, this.state.subcategory);
 
-        if (this.state.searchText !== "") {
+        let subreddit_list = [];
+        this.categoryLists.subreddits = [];
 
+        if (this.state.searchText.length > 2) {
             let query = this.state.searchText.toLowerCase();
             let list = pornlist.data.list;
-            let final = [];
             Object.keys(list).map(sucat => Object.keys(list[sucat]).map(subcat => Object.keys(list[sucat][subcat]).map(subred =>
                 ((sucat.toLowerCase().includes(query) || subcat.toLowerCase().includes(query) || subred.toLowerCase().includes(query)) ?
-                        final.push(subred) :
+                        subreddit_list.push([subred, pornlist.data.list[sucat][subcat][subred].subscribers]) :
                         {}
                 ))));
-            this.categoryLists.subreddits = final;
-            console.log(this.categoryLists.subreddits)
-
-
+            subreddit_list.sort(function (a, b) {
+                return b[1] - a[1]
+            });
+            for (var e in subreddit_list) {
+                this.categoryLists.subreddits.push(subreddit_list[e][0]);
+            }
         }
-        else if (!!this.state.subcategory && !!this.state.supercategory)
-            this.categoryLists.subreddits = Object.keys(pornlist.data.list[this.state.supercategory][this.state.subcategory])
+
+        else if (!!this.state.subcategory && !!this.state.supercategory) {
+            this.categoryLists.subreddits = Object.keys(pornlist.data.list[this.state.supercategory][this.state.subcategory]);
+        }
+
+        else if (!!this.state.supercategory) {
+            this.categoryLists.subcategories = Object.keys(pornlist.data.list[this.state.supercategory]);
+            this.categoryLists.subcategories.map(sc => Object.keys(pornlist.data.list[this.state.supercategory][sc]).map(red =>
+                subreddit_list.push([red, pornlist.data.list[this.state.supercategory][sc][red].subscribers])
+            ));
+
+            subreddit_list.sort(function (a, b) {
+                return b[1] - a[1]
+            });
+            for (var e in subreddit_list) {
+                this.categoryLists.subreddits.push(subreddit_list[e][0])
+            }
+        }
+
 
     }
 

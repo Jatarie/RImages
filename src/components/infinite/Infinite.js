@@ -10,6 +10,7 @@ class Infinite extends Component {
     constructor(props) {
         super(props);
         this.list = [];
+        this.comments = [];
         this.isRowLoaded = this.isRowLoaded.bind(this);
         this.loadMoreRows = this.loadMoreRows.bind(this);
         this.rowRenderer = this.rowRenderer.bind(this);
@@ -38,15 +39,16 @@ class Infinite extends Component {
 
     loadMoreRows({startIndex, stopIndex}) {
         return (axios.get("https://api.reddit.com/r/" + this.props.subreddit + "/top?t=" + this.t + "&limit=10&after=" + this.after).then(response =>
-            response.data.data.children.map(child => this.list.push(child.data.url)) && this.setAfter(response.data.data.after)
+            response.data.data.children.map(child => this.list.push([child.data.url, child.data.id])) && this.setAfter(response.data.data.after)
         ))
     }
+
 
     rowRenderer({key, index, style}) {
         if (!!this.list[index]) {
             return (
                 <div key={key} style={style}>
-                    <Post url={this.list[index]}/>
+                    <Post url={this.list[index][0]} post_id={this.list[index][1]}/>
                 </div>
             )
         }

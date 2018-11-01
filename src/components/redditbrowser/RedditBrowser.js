@@ -45,12 +45,14 @@ class RedditBrowser extends Component {
     }
 
 
+
     render() {
         return (
             <div className="container-fluid redditbrowser">
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossOrigin="anonymous"/>
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossOrigin="anonymous"/>
                 <div align="center" className={"buttons"}>
+                    {this.state.subreddit}<br/>
                     <button onClick={() => this.handleClick('back')}> BACK</button>
                     <br/>
                     <button onClick={() => this.handleClick('all')}> ALL</button>
