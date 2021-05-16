@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "bfeb59e68092a703c6db",
-    "url": "/RImages/static/css/main.4e365124.chunk.css"
+    "revision": "a71f7b7e59565b251361",
+    "url": "/RImages/static/css/main.6489aeae.chunk.css"
   },
   {
-    "revision": "bfeb59e68092a703c6db",
-    "url": "/RImages/static/js/main.bfeb59e6.chunk.js"
+    "revision": "a71f7b7e59565b251361",
+    "url": "/RImages/static/js/main.a71f7b7e.chunk.js"
   },
   {
     "revision": "95eb7f90104cf46f6554",
@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/RImages/static/js/runtime~main.2ebba943.js"
   },
   {
-    "revision": "f0fdafe7c415222195b26680e59f709f",
+    "revision": "bae672a0ae818656e4a3e98451280464",
     "url": "/RImages/index.html"
   }
 ];
