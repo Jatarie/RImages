@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios'
 import Comments from './Comments'
 
@@ -6,7 +6,7 @@ class Post extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {url: null};
+        this.state = { url: null };
         this.albumList = [];
         this.albumListIndex = 0;
         this.albumImageFinder = this.albumImageFinder.bind(this);
@@ -14,13 +14,13 @@ class Post extends Component {
 
     video(url) {
         return (<video autoPlay={true} loop={true} controls={"post"} className={"post"}>
-            <source src={url}/>
+            <source src={url} />
         </video>)
 
     }
 
     image(url) {
-        return (<img src={url} alt="" className={"post"}/>)
+        return (<img src={url} alt="" className={"post"} />)
     }
 
     album(url) {
@@ -29,7 +29,7 @@ class Post extends Component {
                 <button onClick={() => this.albumImageFinder(-1)}>Previous</button>
                 {this.albumListIndex + 1}/{this.albumList.length}
                 <button onClick={() => this.albumImageFinder(1)}>Next</button>
-                <br/>
+                <br />
                 {this.image(url)}
             </div>
         )
@@ -64,7 +64,7 @@ class Post extends Component {
     imgurAlbum(url) {
         var album_hash = url.match(/\/a\/.+$/g)[0].slice(3,);
         axios.get("https://api.imgur.com/3/album/" + album_hash + "?client_id=9b80ec93de0f36b").then(response =>
-            response.data.data.images.map(image => this.albumList.push(image.link)) && this.setState({url: this.album(this.albumList[0])}));
+            response.data.data.images.map(image => this.albumList.push(image.link)) && this.setState({ url: this.album(this.albumList[0]) }));
     }
 
     albumImageFinder(dir) {
@@ -75,17 +75,20 @@ class Post extends Component {
         if (this.albumListIndex >= this.albumList.length) {
             this.albumListIndex = 0;
         }
-        this.setState({url: this.album(this.albumList[this.albumListIndex])})
+        this.setState({ url: this.album(this.albumList[this.albumListIndex]) })
 
     }
 
     gfycat(url) {
         let id = url.match(/\w{8,}/g);
-        axios.get("https://api.gfycat.com/v1/gfycats/" + id).then(response =>
+        console.log(id)
+        axios.get("https://api.redgifs.com/v1/gfycats/" + id).then(response =>
             this.setState({
                 url: this.video(response.data.gfyItem.mp4Url)
-            }))
-
+            })
+        ).catch(function(error){
+            console.log(error)
+        })
     }
 
     reddit(url) {
@@ -97,9 +100,17 @@ class Post extends Component {
     pornhub(url) {
         let id = url.match(/viewkey=\w+/g)[0].slice(8,);
         this.setState({
-            url: <iframe title={id} src={"https://www.pornhub.com/embed/" + id} frameBorder="0" width="1080" height="800" scrolling="no" allowFullScreen/>
+            url: <iframe title={id} src={"https://www.pornhub.com/embed/" + id} frameBorder="0" width="1080" height="800" scrolling="no" allowFullScreen />
         })
+    }
 
+    redgifs(url) {
+        let id = url.match(/watch\/\w+/g)[0].slice(6,)
+        axios.get("https://api.redgifs.com/v1/gfycats/" + id).then(response =>
+            this.setState({
+                url: this.video(response.data.gfyItem.mp4Url)
+            })
+        )
     }
 
 
@@ -121,17 +132,24 @@ class Post extends Component {
             this.reddit(url)
         }
         else if (url.match(/\.mp4/g)) {
-            this.setState({url: this.video(url)})
+            this.setState({ url: this.video(url) })
         }
         else if (url.match(/\.\w{3,5}$/g)) {
-            this.setState({url: this.image(url)});
+            this.setState({ url: this.image(url) });
         }
         else if (url.match(/pornhub/g)) {
             this.pornhub(url)
         }
+        else if (url.match(/redgifs/g)) {
+            this.redgifs(url)
+        }
+
+        else if (url.match(/gfycat/g)) {
+            this.gfycat(url)
+        }
         else {
             console.log(url);
-            this.setState({url: url});
+            this.setState({ url: url });
         }
     }
 
@@ -140,7 +158,7 @@ class Post extends Component {
             <div>
                 {this.props.url}
                 <div align="center" className={"postimage"}>{this.state.url}</div>
-                <Comments post_id={this.props.post_id}/>
+                <Comments post_id={this.props.post_id} />
             </div>
         )
     }
