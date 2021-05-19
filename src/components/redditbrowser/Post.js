@@ -12,8 +12,9 @@ class Post extends Component {
         this.albumImageFinder = this.albumImageFinder.bind(this);
     }
 
+
     video(url) {
-        return (<video autoPlay={true} loop={true} controls={"post"} className={"post"}>
+        return (<video autoPlay={false} loop controls className={"post"} muted id={"video_" + this.props.post_id}>
             <source src={url} />
         </video>)
 
@@ -80,14 +81,12 @@ class Post extends Component {
     }
 
     gfycat(url) {
-        let id = url.match(/\w{8,}/g);
-        console.log(id)
+        let id = url.match(/\w{8,}/g)[0].toLowerCase()
         axios.get("https://api.redgifs.com/v1/gfycats/" + id).then(response =>
             this.setState({
                 url: this.video(response.data.gfyItem.mp4Url)
             })
         ).catch(function(error){
-            console.log(error)
         })
     }
 
@@ -110,7 +109,8 @@ class Post extends Component {
             this.setState({
                 url: this.video(response.data.gfyItem.mp4Url)
             })
-        )
+        ).catch(function(error){
+        })
     }
 
 
@@ -124,9 +124,6 @@ class Post extends Component {
         }
         else if (url.match(/imgur/g)) {
             this.imgur(url)
-        }
-        else if (url.match(/gfycat/g)) {
-            this.gfycat(url)
         }
         else if (url.match(/redd\.it/g)) {
             this.reddit(url)
@@ -157,7 +154,7 @@ class Post extends Component {
         return (
             <div>
                 {this.props.url}
-                <div align="center" className={"postimage"}>{this.state.url}</div>
+                <div align="center" className={"postimage"} id={this.props.post_id}>{this.state.url}</div>
                 <Comments post_id={this.props.post_id} />
             </div>
         )

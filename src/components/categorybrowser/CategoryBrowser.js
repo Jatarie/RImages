@@ -35,7 +35,7 @@ class CategoryBrowser extends Component {
     }
 
     handleClickSubReddit(name) {
-        window.location.href = '#/r/' + name + "?t=all"
+        window.location.href = '/r/' + name + "?t=all"
     }
 
     searchJSON() {

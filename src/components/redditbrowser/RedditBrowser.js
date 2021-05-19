@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './RedditBrowser.css';
 import pornlist from '../categorybrowser/pornlist';
-import Infinite from '../infinite/Infinite';
+import Finite from '../infinite/Finite';
 
 class RedditBrowser extends Component {
     constructor(props) {
@@ -34,12 +34,11 @@ class RedditBrowser extends Component {
 
     handleClick(time) {
         if (time === 'back') {
-            window.location.href = ('#')
+            window.location.href = ('/')
+            
         }
         else {
-            window.location.href = ('#/r/' + this.state.subreddit + '?t=' + time);
-
-            window.location.reload(true);
+            window.location.href = ('/r/' + this.state.subreddit + '?t=' + time);
         }
 
     }
@@ -65,7 +64,7 @@ class RedditBrowser extends Component {
                     <br/>
                     <button onClick={() => this.handleClick('day')}> DAY</button>
                 </div>
-                <Infinite subreddit={this.state.subreddit} t={this.props.location.search}/>
+                <Finite subreddit={this.state.subreddit} t={this.props.location.search}/>
             </div>
 
         )
